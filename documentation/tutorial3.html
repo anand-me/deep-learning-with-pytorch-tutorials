@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3: Neural Networks with PyTorch - Mathematical Foundations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 24px;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #2ecc71;
+            padding-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        
+        h2 {
+            border-left: 5px solid #2ecc71;
+            padding-left: 10px;
+            background-color: #ecf0f1;
+            padding: 8px 12px;
+        }
+        
+        .author-info {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .definition {
+            background-color: #eafaf1;
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .note {
+            background-color: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .example {
+            background-color: #ebf5fb;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .formula {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'Cambria Math', Georgia, serif;
+            font-size: 1.1em;
+        }
+        
+        .section-separator {
+            border-top: 1px dashed #bdc3c7;
+            margin: 40px 0;
+        }
+        
+        .github-link {
+            display: inline-block;
+            font-style: italic;
+            color: #2ecc71;
+            text-decoration: none;
+        }
+        
+        .github-link:hover {
+            text-decoration: underline;
+        }
+        
+        .concept-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .concept-box {
+            flex: 1 1 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        figcaption {
+            font-style: italic;
+            margin-top: 8px;
+            color: #666;
+        }
+        
+        .network-diagram {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #2ecc71;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+        
+        td {
+            padding: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .reference {
+            padding-left: 20px;
+            text-indent: -20px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .concept-box {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Chapter 3: Neural Networks with PyTorch</h1>
+        <div class="author-info">
+            <h3>Author: Akshay Anand, PhD Candidate</h3>
+            <p><strong>Florida State University (2021 - 20XX)</strong></p>
+            <a href="https://github.com/anand-me" class="github-link">GitHub</a>
+        </div>
+    </header>
+
+    <section>
+        <h2>Introduction</h2>
+        <p>
+            Neural networks are computational models inspired by the human brain's structure and function. They consist of interconnected layers of artificial neurons that process and transform data. In this chapter, we will explore the mathematical principles behind neural networks and how to implement them using PyTorch's neural network module.
+        </p>
+        <p>
+            By the end of this chapter, you will understand:
+        </p>
+        <ul>
+            <li>The theoretical foundations of neural networks</li>
+            <li>How to build network layers with PyTorch's nn module</li>
+            <li>Different types of activation functions and their properties</li>
+            <li>Techniques for constructing complex network architectures</li>
+        </ul>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>1. PyTorch's nn Module</h2>
+        
+        <h3>1.1 Mathematical Foundations of Neural Networks</h3>
+        <p>
+            At their core, neural networks are composed of layers of computational units (neurons) that transform input data into outputs through a series of mathematical operations. Each neuron computes a weighted sum of its inputs, adds a bias term, and applies a non-linear activation function:
+        </p>
+        <div class="formula">
+            \[y = f\left(\sum_{i=1}^{n} w_i x_i + b\right) = f(W^T X + b)\]
+        </div>
+        <p>
+            where:
+        </p>
+        <ul>
+            <li>\(x_i\) are the input values</li>
+            <li>\(w_i\) are the weights associated with each input</li>
+            <li>\(b\) is the bias term</li>
+            <li>\(f\) is a non-linear activation function</li>
+        </ul>
+
+        <div class="definition">
+            <h4>The Universal Approximation Theorem</h4>
+            <p>
+                The universal approximation theorem states that a feedforward neural network with a single hidden layer containing a finite number of neurons can approximate any continuous function on compact subsets of \(\mathbb{R}^n\), under mild assumptions on the activation function. This theoretical foundation justifies the use of neural networks as function approximators <sup>[1]</sup>.
+            </p>
+        </div>
+
+        <h3>1.2 The nn.Module Base Class</h3>
+        <p>
+            In PyTorch, neural network components are built upon the <code>nn.Module</code> base class, which provides several essential functionalities:
+        </p>
+        <ol>
+            <li><strong>Parameter Management</strong>: Automatically tracks and registers all parameters (weights and biases)</li>
+            <li><strong>Device Management</strong>: Simplifies moving models between devices (CPU/GPU)</li>
+            <li><strong>Serialization</strong>: Enables saving and loading model states</li>
+            <li><strong>Training Mode Control</strong>: Allows toggling between training and evaluation modes</li>
+        </ol>
+
+        <div class="note">
+            <p>
+                All neural network components in PyTorch inherit from <code>nn.Module</code>, forming a nested structure that automatically registers all parameters. This design pattern is similar to the Composite Pattern in software engineering <sup>[2]</sup>.
+            </p>
+        </div>
+
+        <h3>1.3 Functional vs. Module Interface</h3>
+        <p>
+            PyTorch provides two interfaces for neural network operations:
+        </p>
+        <div class="concept-container">
+            <div class="concept-box">
+                <h3>Functional Interface (torch.nn.functional)</h3>
+                <p>
+                    The functional interface provides stateless functions that implement neural network operations without storing parameters.
+                </p>
+                <p>
+                    Example: <code>F.relu(x)</code>, <code>F.conv2d(x, weight, bias)</code>
+                </p>
+                <p>
+                    Advantages:
+                </p>
+                <ul>
+                    <li>More explicit control over operations</li>
+                    <li>Useful for custom implementations</li>
+                    <li>Lower overhead for simple operations</li>
+                </ul>
+            </div>
+            <div class="concept-box">
+                <h3>Module Interface (torch.nn)</h3>
+                <p>
+                    The module interface provides stateful objects that encapsulate parameters and implement the forward computation.
+                </p>
+                <p>
+                    Example: <code>nn.ReLU()</code>, <code>nn.Conv2d(in_channels, out_channels, kernel_size)</code>
+                </p>
+                <p>
+                    Advantages:
+                </p>
+                <ul>
+                    <li>Automatic parameter management</li>
+                    <li>Built-in state persistence</li>
+                    <li>Seamless integration with model architecture</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>2. Building Neural Network Layers</h2>
+        
+        <h3>2.1 Linear Layers (Fully Connected)</h3>
+        <p>
+            Linear layers, also known as fully connected or dense layers, are the most basic building blocks of neural networks. Mathematically, a linear layer implements the transformation:
+        </p>
+        <div class="formula">
+            \[y = xW^T + b\]
+        </div>
+        <p>
+            where:
+        </p>
+        <ul>
+            <li>\(x\) is the input tensor of shape (batch_size, in_features)</li>
+            <li>\(W\) is the weight matrix of shape (out_features, in_features)</li>
+            <li>\(b\) is the bias vector of shape (out_features)</li>
+            <li>\(y\) is the output tensor of shape (batch_size, out_features)</li>
+        </ul>
+
+        <div class="example">
+            <h4>Weight Initialization in Linear Layers</h4>
+            <p>
+                Proper weight initialization is crucial for successful training. Common methods include:
+            </p>
+            <ul>
+                <li><strong>Xavier/Glorot Initialization</strong>: Weights are sampled from a uniform distribution with variance \(\frac{2}{n_{in} + n_{out}}\) or a normal distribution with variance \(\frac{2}{n_{in} + n_{out}}\) <sup>[3]</sup></li>
+                <li><strong>Kaiming/He Initialization</strong>: Weights are sampled from a normal distribution with variance \(\frac{2}{n_{in}}\) for ReLU activations <sup>[4]</sup></li>
+            </ul>
+            <p>
+                PyTorch implements various initialization methods in the <code>torch.nn.init</code> module.
+            </p>
+        </div>
+
+        <h3>2.2 Convolutional Layers</h3>
+        <p>
+            Convolutional layers apply a convolution operation to the input, which is particularly effective for processing grid-like data such as images. The 2D convolution operation can be expressed as:
+        </p>
+        <div class="formula">
+            \[y_{i,j,k} = \sum_{a=0}^{k_h-1} \sum_{b=0}^{k_w-1} \sum_{c=0}^{C_{in}-1} x_{i',j',c} \cdot w_{a,b,c,k} + b_k\]
+        </div>
+        <p>
+            where:
+        </p>
+        <ul>
+            <li>\(x\) is the input tensor of shape (batch_size, channels_in, height_in, width_in)</li>
+            <li>\(w\) is the weight tensor of shape (channels_out, channels_in, kernel_height, kernel_width)</li>
+            <li>\(b\) is the bias vector of shape (channels_out)</li>
+            <li>\(i' = i \times \text{stride}_h - \text{padding}_h + a\)</li>
+            <li>\(j' = j \times \text{stride}_w - \text{padding}_w + b\)</li>
+        </ul>
+
+        <div class="note">
+            <p>
+                Convolutional layers have several advantages over linear layers for image processing:
+            </p>
+            <ol>
+                <li><strong>Parameter Efficiency</strong>: Weight sharing reduces the number of parameters</li>
+                <li><strong>Spatial Locality</strong>: Captures local patterns in data</li>
+                <li><strong>Translation Invariance</strong>: Detects features regardless of their position</li>
+            </ol>
+            <p>
+                These properties make CNNs particularly suitable for computer vision tasks <sup>[5]</sup>.
+            </p>
+        </div>
+
+        <h3>2.3 Pooling Layers</h3>
+        <p>
+            Pooling layers reduce the spatial dimensions of the data by applying a downsampling operation over local regions. The two most common pooling operations are:
+        </p>
+        <ol>
+            <li>
+                <strong>Max Pooling</strong>: Takes the maximum value in each pooling window:
+                <div class="formula">
+                    \[y_{i,j,k} = \max_{a=0}^{k_h-1} \max_{b=0}^{k_w-1} x_{i \times s_h + a, j \times s_w + b, k}\]
+                </div>
+            </li>
+            <li>
+                <strong>Average Pooling</strong>: Takes the average value in each pooling window:
+                <div class="formula">
+                    \[y_{i,j,k} = \frac{1}{k_h \times k_w} \sum_{a=0}^{k_h-1} \sum_{b=0}^{k_w-1} x_{i \times s_h + a, j \times s_w + b, k}\]
+                </div>
+            </li>
+        </ol>
+
+        <h3>2.4 Normalization Layers</h3>
+        <p>
+            Normalization layers standardize the activations in a network, which can improve training stability and speed. The most common types are:
+        </p>
+        <ol>
+            <li>
+                <strong>Batch Normalization</strong>: Normalizes activations across the batch dimension <sup>[6]</sup>:
+                <div class="formula">
+                    \[y = \gamma \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} + \beta\]
+                </div>
+                where \(\mu_B\) and \(\sigma_B^2\) are the mean and variance computed over the batch.
+            </li>
+            <li>
+                <strong>Layer Normalization</strong>: Normalizes activations across the feature dimension <sup>[7]</sup>:
+                <div class="formula">
+                    \[y = \gamma \frac{x - \mu_L}{\sqrt{\sigma_L^2 + \epsilon}} + \beta\]
+                </div>
+                where \(\mu_L\) and \(\sigma_L^2\) are the mean and variance computed over the layer.
+            </li>
+        </ol>
+
+        <div class="definition">
+            <h4>Benefits of Normalization</h4>
+            <ul>
+                <li>Mitigates the internal covariate shift problem</li>
+                <li>Enables higher learning rates</li>
+                <li>Reduces dependence on careful initialization</li>
+                <li>Acts as a form of regularization</li>
+            </ul>
+        </div>
+
+        <h3>2.5 Recurrent Layers</h3>
+        <p>
+            Recurrent layers process sequential data by maintaining a hidden state that captures information from previous time steps. The basic recurrent cell computes:
+        </p>
+        <div class="formula">
+            \[h_t = f(W_{ih} x_t + W_{hh} h_{t-1} + b_h)\]
+        </div>
+        <p>
+            where:
+        </p>
+        <ul>
+            <li>\(x_t\) is the input at time step \(t\)</li>
+            <li>\(h_t\) is the hidden state at time step \(t\)</li>
+            <li>\(W_{ih}\) is the input-to-hidden weight matrix</li>
+            <li>\(W_{hh}\) is the hidden-to-hidden weight matrix</li>
+            <li>\(b_h\) is the bias</li>
+            <li>\(f\) is a non-linear activation function, typically tanh</li>
+        </ul>
+
+        <p>
+            More advanced recurrent units include:
+        </p>
+        <ul>
+            <li>
+                <strong>Long Short-Term Memory (LSTM)</strong>: Designed to address the vanishing gradient problem by introducing gating mechanisms <sup>[8]</sup>
+            </li>
+            <li>
+                <strong>Gated Recurrent Unit (GRU)</strong>: A simplified version of LSTM with fewer parameters <sup>[9]</sup>
+            </li>
+        </ul>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>3. Activation Functions</h2>
+        
+        <h3>3.1 Role of Activation Functions</h3>
+        <p>
+            Activation functions introduce non-linearity into neural networks, enabling them to learn complex patterns. Without non-linear activations, a neural network would collapse into a single linear transformation regardless of its depth.
+        </p>
+
+        <div class="definition">
+            <h4>Properties of Activation Functions</h4>
+            <p>
+                Ideal activation functions should have several properties:
+            </p>
+            <ul>
+                <li>Non-linearity</li>
+                <li>Differentiability (for gradient-based optimization)</li>
+                <li>Range that prevents extreme values</li>
+                <li>Computational efficiency</li>
+                <li>Approximate identity near the origin (for proper initialization)</li>
+            </ul>
+        </div>
+
+        <h3>3.2 Common Activation Functions</h3>
+        <p>
+            Here are the mathematical definitions and properties of common activation functions:
+        </p>
+        <table>
+            <tr>
+                <th>Function</th>
+                <th>Formula</th>
+                <th>Range</th>
+                <th>Derivative</th>
+                <th>Properties</th>
+            </tr>
+            <tr>
+                <td>Sigmoid</td>
+                <td>\( \sigma(x) = \frac{1}{1 + e^{-x}} \)</td>
+                <td>(0, 1)</td>
+                <td>\( \sigma'(x) = \sigma(x)(1 - \sigma(x)) \)</td>
+                <td>
+                    <ul>
+                        <li>Smooth, continuous</li>
+                        <li>Outputs can be interpreted as probabilities</li>
+                        <li>Suffers from vanishing gradient for large inputs</li>
+                        <li>Not zero-centered</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Tanh</td>
+                <td>\( \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} \)</td>
+                <td>(-1, 1)</td>
+                <td>\( \tanh'(x) = 1 - \tanh^2(x) \)</td>
+                <td>
+                    <ul>
+                        <li>Zero-centered</li>
+                        <li>Steeper gradients than sigmoid</li>
+                        <li>Still suffers from vanishing gradient</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>ReLU</td>
+                <td>\( \text{ReLU}(x) = \max(0, x) \)</td>
+                <td>[0, ∞)</td>
+                <td>\( \text{ReLU}'(x) = \begin{cases} 
+                1 & \text{if } x > 0 \\
+                0 & \text{if } x \leq 0
+                \end{cases} \)</td>
+                <td>
+                    <ul>
+                        <li>Computationally efficient</li>
+                        <li>Helps mitigate vanishing gradient</li>
+                        <li>Suffers from "dying ReLU" problem</li>
+                        <li>Non-zero centered</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Leaky ReLU</td>
+                <td>\( \text{LeakyReLU}(x) = \begin{cases} 
+                x & \text{if } x > 0 \\
+                \alpha x & \text{if } x \leq 0
+                \end{cases} \)</td>
+                <td>(-∞, ∞)</td>
+                <td>\( \text{LeakyReLU}'(x) = \begin{cases} 
+                1 & \text{if } x > 0 \\
+                \alpha & \text{if } x \leq 0
+                \end{cases} \)</td>
+                <td>
+                    <ul>
+                        <li>Addresses the dying ReLU problem</li>
+                        <li>Allows small negative values</li>
+                        <li>α is typically small (e.g., 0.01)</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>ELU</td>
+                <td>\( \text{ELU}(x) = \begin{cases} 
+                x & \text{if } x > 0 \\
+                \alpha(e^x - 1) & \text{if } x \leq 0
+                \end{cases} \)</td>
+                <td>(-α, ∞)</td>
+                <td>\( \text{ELU}'(x) = \begin{cases} 
+                1 & \text{if } x > 0 \\
+                \alpha e^x & \text{if } x \leq 0
+                \end{cases} \)</td>
+                <td>
+                    <ul>
+                        <li>Smooth at x = 0</li>
+                        <li>More robust to noise</li>
+                        <li>Can be computationally expensive</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>GELU</td>
+                <td>\( \text{GELU}(x) = x \cdot \Phi(x) \)</td>
+                <td>(-∞, ∞)</td>
+                <td>(complex)</td>
+                <td>
+                    <ul>
+                        <li>Used in state-of-the-art models like BERT</li>
+                        <li>Smooth, non-monotonic activation</li>
+                        <li>Φ is the CDF of the standard normal distribution</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Softmax</td>
+                <td>\( \text{Softmax}(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{n} e^{x_j}} \)</td>
+                <td>(0, 1) with \(\sum_i \text{Softmax}(x_i) = 1\)</td>
+                <td>(complex)</td>
+                <td>
+                    <ul>
+                        <li>Used for multi-class classification</li>
+                        <li>Outputs sum to 1, interpreted as probabilities</li>
+                        <li>Preserves relative differences in logits</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <p>
+                ReLU and its variants (Leaky ReLU, PReLU, ELU) have become the most popular activation functions in modern neural networks due to their computational efficiency and effectiveness in mitigating the vanishing gradient problem <sup>[10]</sup>.
+            </p>
+        </div>
+
+        <h3>3.3 Activation Functions and Gradients</h3>
+        <p>
+            The choice of activation function significantly impacts gradient flow during backpropagation. Issues that can arise include:
+        </p>
+        <ol>
+            <li>
+                <strong>Vanishing Gradients</strong>: When gradients become extremely small, training becomes slow or stalls. This commonly occurs with sigmoid and tanh activations for deep networks.
+            </li>
+            <li>
+                <strong>Exploding Gradients</strong>: When gradients become extremely large, training becomes unstable. Gradient clipping is often used to address this issue.
+            </li>
+            <li>
+                <strong>Dead Neurons</strong>: With ReLU, neurons can "die" when their output becomes consistently zero, preventing further learning. Leaky ReLU and its variants help mitigate this problem.
+            </li>
+        </ol>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>4. Creating Complete Network Architectures</h2>
+        
+        <h3>4.1 Feedforward Neural Networks</h3>
+        <p>
+            Feedforward Neural Networks (FNNs), also known as Multi-Layer Perceptrons (MLPs), are the most basic type of neural network. They consist of multiple layers of neurons where information flows in one direction from input to output.
+        </p>
+        <p>
+		 Mathematically, an MLP with \(L\) layers computes:
+        </p>
+        <div class="formula">
+            \begin{align}
+            h^{(1)} &= f_1(W^{(1)}x + b^{(1)}) \\
+            h^{(2)} &= f_2(W^{(2)}h^{(1)} + b^{(2)}) \\
+            &\vdots \\
+            h^{(L)} &= f_L(W^{(L)}h^{(L-1)} + b^{(L)})
+            \end{align}
+        </div>
+        <p>
+            where \(h^{(l)}\) is the output of layer \(l\), \(W^{(l)}\) and \(b^{(l)}\) are the weights and biases of layer \(l\), and \(f_l\) is the activation function of layer \(l\).
+        </p>
+
+        <div class="note">
+            <p>
+                MLPs are universal function approximators <sup>[1]</sup>, but they have limitations for complex tasks, especially those involving grid-like data (images) or sequential data (text, time series).
+            </p>
+        </div>
+
+        <h3>4.2 Convolutional Neural Networks</h3>
+        <p>
+            Convolutional Neural Networks (CNNs) are specialized for processing grid-like data, such as images. A typical CNN architecture includes:
+        </p>
+        <ol>
+            <li><strong>Convolutional Layers</strong>: Apply convolution operations to extract spatial features</li>
+            <li><strong>Pooling Layers</strong>: Reduce spatial dimensions and create translation invariance</li>
+            <li><strong>Normalization Layers</strong>: Stabilize training and improve generalization</li>
+            <li><strong>Fully Connected Layers</strong>: Process the extracted features for classification or regression</li>
+        </ol>
+
+        <p>
+            CNNs have revolutionized computer vision, achieving state-of-the-art performance on various tasks. Notable architectures include:
+        </p>
+        <ul>
+            <li><strong>LeNet-5</strong>: Early CNN for digit recognition <sup>[11]</sup></li>
+            <li><strong>AlexNet</strong>: First deep CNN to win the ImageNet competition <sup>[12]</sup></li>
+            <li><strong>VGG</strong>: Deep CNN with uniform, simple architecture <sup>[13]</sup></li>
+            <li><strong>ResNet</strong>: Introduced skip connections to train very deep networks <sup>[14]</sup></li>
+            <li><strong>Inception/GoogLeNet</strong>: Used inception modules with parallel convolutions <sup>[15]</sup></li>
+        </ul>
+
+        <h3>4.3 Recurrent Neural Networks</h3>
+        <p>
+            Recurrent Neural Networks (RNNs) are designed for sequential data, maintaining an internal state that captures information from previous time steps. The basic RNN computes:
+        </p>
+        <div class="formula">
+            \begin{align}
+            h_t &= f(W_{ih}x_t + W_{hh}h_{t-1} + b_h) \\
+            y_t &= g(W_{ho}h_t + b_o)
+            \end{align}
+        </div>
+        <p>
+            where \(h_t\) is the hidden state at time \(t\), \(x_t\) is the input at time \(t\), \(y_t\) is the output at time \(t\), and \(f\) and \(g\) are activation functions.
+        </p>
+
+        <p>
+            Advanced RNN architectures include:
+        </p>
+        <ol>
+		 <li>
+                <strong>LSTM</strong>: Long Short-Term Memory networks address the vanishing gradient problem using gating mechanisms <sup>[8]</sup>
+                <div class="formula">
+                    \begin{align}
+                    f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
+                    i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
+                    \tilde{C}_t &= \tanh(W_C \cdot [h_{t-1}, x_t] + b_C) \\
+                    C_t &= f_t * C_{t-1} + i_t * \tilde{C}_t \\
+                    o_t &= \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \\
+                    h_t &= o_t * \tanh(C_t)
+                    \end{align}
+                </div>
+                where \(f_t\), \(i_t\), and \(o_t\) are the forget, input, and output gates respectively.
+            </li>
+            <li>
+                <strong>GRU</strong>: Gated Recurrent Units simplify LSTM by combining gates <sup>[9]</sup>
+                <div class="formula">
+                    \begin{align}
+                    z_t &= \sigma(W_z \cdot [h_{t-1}, x_t] + b_z) \\
+                    r_t &= \sigma(W_r \cdot [h_{t-1}, x_t] + b_r) \\
+                    \tilde{h}_t &= \tanh(W \cdot [r_t * h_{t-1}, x_t] + b) \\
+                    h_t &= (1 - z_t) * h_{t-1} + z_t * \tilde{h}_t
+                    \end{align}
+                </div>
+                where \(z_t\) and \(r_t\) are the update and reset gates.
+            </li>
+        </ol>
+
+        <div class="example">
+            <h4>Bidirectional RNNs</h4>
+            <p>
+                Bidirectional RNNs process sequences in both forward and backward directions, allowing the network to capture context from both past and future states. This is particularly useful for tasks where the entire sequence is available, such as natural language processing or speech recognition <sup>[16]</sup>.
+            </p>
+        </div>
+
+        <h3>4.4 Hybrid and Advanced Architectures</h3>
+        <p>
+            Modern neural networks often combine different architectural elements to leverage their respective strengths:
+        </p>
+        <ol>
+            <li>
+                <strong>CNN-RNN Hybrids</strong>: Use CNNs to extract spatial features and RNNs to model temporal dependencies. These are common in video analysis, image captioning, and visual question answering <sup>[17]</sup>.
+            </li>
+            <li>
+                <strong>Attention Mechanisms</strong>: Allow networks to focus on specific parts of the input when producing outputs. Attention has become essential in natural language processing and computer vision <sup>[18]</sup>.
+            </li>
+            <li>
+                <strong>Residual Connections</strong>: Skip connections that allow gradients to flow directly through the network, enabling training of very deep architectures <sup>[14]</sup>:
+                <div class="formula">
+                    \[h_l = f(h_{l-1}) + h_{l-1}\]
+                </div>
+            </li>
+            <li>
+                <strong>Dense Connections</strong>: Connect each layer to all subsequent layers, promoting feature reuse and gradient flow <sup>[19]</sup>:
+                <div class="formula">
+                    \[h_l = f([h_0, h_1, \ldots, h_{l-1}])\]
+                </div>
+                where \([h_0, h_1, \ldots, h_{l-1}]\) represents concatenation of all previous layer outputs.
+            </li>
+        </ol>
+
+        <figure>
+            <div style="text-align: center;">
+                <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Input layer -->
+                    <circle cx="100" cy="100" r="20" fill="#2ecc71" />
+                    <circle cx="100" cy="200" r="20" fill="#2ecc71" />
+                    <circle cx="100" cy="300" r="20" fill="#2ecc71" />
+                    <text x="60" y="200" text-anchor="middle" fill="#333" font-weight="bold">Input Layer</text>
+                    
+                    <!-- Hidden layer 1 -->
+                    <circle cx="250" cy="100" r="20" fill="#3498db" />
+                    <circle cx="250" cy="175" r="20" fill="#3498db" />
+                    <circle cx="250" cy="250" r="20" fill="#3498db" />
+                    <circle cx="250" cy="325" r="20" fill="#3498db" />
+                    <text x="250" y="50" text-anchor="middle" fill="#333" font-weight="bold">Hidden Layer 1</text>
+                    
+                    <!-- Hidden layer 2 -->
+                    <circle cx="400" cy="125" r="20" fill="#3498db" />
+                    <circle cx="400" cy="200" r="20" fill="#3498db" />
+                    <circle cx="400" cy="275" r="20" fill="#3498db" />
+                    <text x="400" y="50" text-anchor="middle" fill="#333" font-weight="bold">Hidden Layer 2</text>
+                    
+                    <!-- Output layer -->
+                    <circle cx="550" cy="150" r="20" fill="#e74c3c" />
+                    <circle cx="550" cy="250" r="20" fill="#e74c3c" />
+                    <text x="590" y="200" text-anchor="middle" fill="#333" font-weight="bold">Output Layer</text>
+                    
+                    <!-- Connections - Input to Hidden 1 -->
+                    <line x1="120" y1="100" x2="230" y2="100" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="100" x2="230" y2="175" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="100" x2="230" y2="250" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="100" x2="230" y2="325" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="120" y1="200" x2="230" y2="100" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="200" x2="230" y2="175" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="200" x2="230" y2="250" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="200" x2="230" y2="325" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="120" y1="300" x2="230" y2="100" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="300" x2="230" y2="175" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="300" x2="230" y2="250" stroke="#aaa" stroke-width="2" />
+                    <line x1="120" y1="300" x2="230" y2="325" stroke="#aaa" stroke-width="2" />
+                    
+                    <!-- Connections - Hidden 1 to Hidden 2 -->
+                    <line x1="270" y1="100" x2="380" y2="125" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="100" x2="380" y2="200" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="100" x2="380" y2="275" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="270" y1="175" x2="380" y2="125" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="175" x2="380" y2="200" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="175" x2="380" y2="275" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="270" y1="250" x2="380" y2="125" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="250" x2="380" y2="200" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="250" x2="380" y2="275" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="270" y1="325" x2="380" y2="125" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="325" x2="380" y2="200" stroke="#aaa" stroke-width="2" />
+                    <line x1="270" y1="325" x2="380" y2="275" stroke="#aaa" stroke-width="2" />
+                    
+                    <!-- Connections - Hidden 2 to Output -->
+                    <line x1="420" y1="125" x2="530" y2="150" stroke="#aaa" stroke-width="2" />
+                    <line x1="420" y1="125" x2="530" y2="250" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="420" y1="200" x2="530" y2="150" stroke="#aaa" stroke-width="2" />
+                    <line x1="420" y1="200" x2="530" y2="250" stroke="#aaa" stroke-width="2" />
+                    
+                    <line x1="420" y1="275" x2="530" y2="150" stroke="#aaa" stroke-width="2" />
+                    <line x1="420" y1="275" x2="530" y2="250" stroke="#aaa" stroke-width="2" />
+                    
+                    <!-- Residual Connection (Hidden 1 to Output) -->
+                    <path d="M 270 100 C 350 50, 450 50, 530 150" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" fill="none" />
+                    <text x="400" y="30" text-anchor="middle" fill="#e74c3c" font-style="italic">Residual Connection</text>
+                </svg>
+            </div>
+            <figcaption>Figure 1: Illustration of a neural network with residual connections</figcaption>
+        </figure>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>Conclusion</h2>
+        <p>
+            In this chapter, we explored the mathematical foundations of neural networks and how they are implemented in PyTorch. We covered the essential building blocks, from individual layers to complete architectures, providing the theoretical understanding necessary to build effective neural networks.
+        </p>
+        <p>
+            The flexibility and modularity of PyTorch's nn module allows for the creation of diverse network architectures, from simple MLPs to complex hybrids combining CNNs, RNNs, and attention mechanisms. This modularity, combined with PyTorch's automatic differentiation capabilities, enables researchers and practitioners to rapidly prototype and experiment with novel architectures.
+        </p>
+        <p>
+            In the next chapter, we will build upon this foundation to explore how to train these neural networks efficiently using optimization techniques and loss functions.
+        </p>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>References</h2>
+        <ol>
+            <li class="reference">[1] Hornik, K., Stinchcombe, M., & White, H. (1989). Multilayer feedforward networks are universal approximators. Neural Networks, 2(5), 359-366.</li>
+            <li class="reference">[2] Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley.</li>
+            <li class="reference">[3] Glorot, X., & Bengio, Y. (2010). Understanding the difficulty of training deep feedforward neural networks. In Proceedings of the thirteenth international conference on artificial intelligence and statistics (pp. 249-256).</li>
+            <li class="reference">[4] He, K., Zhang, X., Ren, S., & Sun, J. (2015). Delving deep into rectifiers: Surpassing human-level performance on ImageNet classification. In Proceedings of the IEEE international conference on computer vision (pp. 1026-1034).</li>
+            <li class="reference">[5] LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444.</li>
+            <li class="reference">[6] Ioffe, S., & Szegedy, C. (2015). Batch normalization: Accelerating deep network training by reducing internal covariate shift. In International conference on machine learning (pp. 448-456).</li>
+            <li class="reference">[7] Ba, J. L., Kiros, J. R., & Hinton, G. E. (2016). Layer normalization. arXiv preprint arXiv:1607.06450.</li>
+            <li class="reference">[8] Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory. Neural computation, 9(8), 1735-1780.</li>
+            <li class="reference">[9] Cho, K., Van Merriënboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., & Bengio, Y. (2014). Learning phrase representations using RNN encoder-decoder for statistical machine translation. arXiv preprint arXiv:1406.1078.</li>
+            <li class="reference">[10] Nair, V., & Hinton, G. E. (2010). Rectified linear units improve restricted boltzmann machines. In Proceedings of the 27th international conference on machine learning (ICML-10) (pp. 807-814).</li>
+            <li class="reference">[11] LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.</li>
+            <li class="reference">[12] Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. In Advances in neural information processing systems (pp. 1097-1105).</li>
+            <li class="reference">[13] Simonyan, K., & Zisserman, A. (2014). Very deep convolutional networks for large-scale image recognition. arXiv preprint arXiv:1409.1556.</li>
+            <li class="reference">[14] He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 770-778).</li>
+            <li class="reference">[15] Szegedy, C., Liu, W., Jia, Y., Sermanet, P., Reed, S., Anguelov, D., ... & Rabinovich, A. (2015). Going deeper with convolutions. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 1-9).</li>
+            <li class="reference">[16] Schuster, M., & Paliwal, K. K. (1997). Bidirectional recurrent neural networks. IEEE transactions on Signal Processing, 45(11), 2673-2681.</li>
+            <li class="reference">[17] Donahue, J., Anne Hendricks, L., Guadarrama, S., Rohrbach, M., Venugopalan, S., Saenko, K., & Darrell, T. (2015). Long-term recurrent convolutional networks for visual recognition and description. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 2625-2634).</li>
+            <li class="reference">[18] Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. In Advances in neural information processing systems (pp. 5998-6008).</li>
+            <li class="reference">[19] Huang, G., Liu, Z., Van Der Maaten, L., & Weinberger, K. Q. (2017). Densely connected convolutional networks. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 4700-4708).</li>
+        </ol>
+    </section>
+</body>
+</html>

@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Training Models in PyTorch - Mathematical Foundations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 24px;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        
+        h2 {
+            border-left: 5px solid #e74c3c;
+            padding-left: 10px;
+            background-color: #ecf0f1;
+            padding: 8px 12px;
+        }
+        
+        .author-info {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .definition {
+            background-color: #fdedec;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .note {
+            background-color: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .example {
+            background-color: #ebf5fb;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .formula {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'Cambria Math', Georgia, serif;
+            font-size: 1.1em;
+        }
+        
+        .section-separator {
+            border-top: 1px dashed #bdc3c7;
+            margin: 40px 0;
+        }
+        
+        .github-link {
+            display: inline-block;
+            font-style: italic;
+            color: #e74c3c;
+            text-decoration: none;
+        }
+        
+        .github-link:hover {
+            text-decoration: underline;
+        }
+        
+        .concept-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .concept-box {
+            flex: 1 1 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        figure {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        figcaption {
+            font-style: italic;
+            margin-top: 8px;
+            color: #666;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #e74c3c;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+        
+        td {
+            padding: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .reference {
+            padding-left: 20px;
+            text-indent: -20px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .concept-box {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Chapter 4: Training Models in PyTorch</h1>
+        <div class="author-info">
+            <h3>Author: Akshay Anand, PhD Candidate</h3>
+            <p><strong>Florida State University (2021 - 20XX)</strong></p>
+            <a href="https://github.com/anand-me" class="github-link">GitHub</a>
+        </div>
+    </header>
+
+    <section>
+        <h2>Introduction</h2>
+        <p>
+            Training neural networks is the process of adjusting the model parameters to minimize a loss function that quantifies the difference between predictions and ground truth. This chapter explores the mathematical foundations of neural network training and their implementation in PyTorch.
+        </p>
+        <p>
+            By the end of this chapter, you will understand:
+        </p>
+        <ul>
+            <li>The mathematical principles behind various loss functions</li>
+            <li>Optimization algorithms for neural network training</li>
+            <li>Techniques for implementing efficient training loops</li>
+            <li>Advanced training methods for improving model performance</li>
+        </ul>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>1. Loss Functions</h2>
+        
+        <h3>1.1 Mathematical Foundations of Loss Functions</h3>
+        <p>
+            Loss functions, also known as cost or objective functions, measure the discrepancy between model predictions and true values. They provide the signal for adjusting model parameters during training. Mathematically, a loss function \(L\) maps a set of predicted values \(\hat{y}\) and true values \(y\) to a scalar value representing the "cost" of the predictions:
+        </p>
+        <div class="formula">
+            \[L(\hat{y}, y) \mapsto \mathbb{R}\]
+        </div>
+        <p>
+            The goal of training is to find model parameters that minimize this loss function:
+        </p>
+        <div class="formula">
+            \[\theta^* = \arg\min_{\theta} L(f_{\theta}(X), Y)\]
+        </div>
+        <p>
+            where \(\theta\) represents the model parameters, \(f_{\theta}\) is the model function, and \(X\) and \(Y\) are the input and target data.
+        </p>
+
+        <h3>1.2 Regression Loss Functions</h3>
+        <p>
+            Regression tasks involve predicting continuous values. The following loss functions are commonly used for regression:
+        </p>
+        <ol>
+            <li>
+                <strong>Mean Squared Error (MSE)</strong>: Measures the average squared difference between predictions and true values <sup>[1]</sup>:
+                <div class="formula">
+                    \[\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\]
+                </div>
+                <p>
+                    Properties:
+                </p>
+                <ul>
+                    <li>Penalizes larger errors more heavily due to the square term</li>
+                    <li>Differentiable everywhere, making it suitable for gradient-based optimization</li>
+                    <li>Sensitive to outliers</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Mean Absolute Error (MAE)</strong>: Measures the average absolute difference between predictions and true values:
+                <div class="formula">
+                    \[\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\]
+                </div>
+                <p>
+                    Properties:
+                </p>
+                <ul>
+                    <li>Less sensitive to outliers compared to MSE</li>
+                    <li>Not differentiable at zero, which can cause optimization challenges</li>
+                    <li>Encourages predictions that match the median of the data</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Huber Loss</strong>: Combines MSE and MAE to be both differentiable and less sensitive to outliers <sup>[2]</sup>:
+                <div class="formula">
+                    \[L_{\delta}(y, \hat{y}) = \begin{cases}
+                    \frac{1}{2}(y - \hat{y})^2 & \text{for } |y - \hat{y}| \leq \delta \\
+                    \delta(|y - \hat{y}| - \frac{1}{2}\delta) & \text{otherwise}
+                    \end{cases}\]
+                </div>
+                <p>
+                    Properties:
+                </p>
+                <ul>
+                    <li>Behaves like MSE for small errors and like MAE for large errors</li>
+                    <li>The transition point \(\delta\) is a hyperparameter</li>
+                    <li>Differentiable everywhere</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>1.3 Classification Loss Functions</h3>
+        <p>
+            Classification tasks involve predicting discrete class labels. The following loss functions are commonly used for classification:
+        </p>
+        <ol>
+            <li>
+                <strong>Binary Cross-Entropy (BCE)</strong>: For binary classification tasks <sup>[3]</sup>:
+                <div class="formula">
+                    \[\text{BCE} = -\frac{1}{n} \sum_{i=1}^{n} [y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i)]\]
+                </div>
+                <p>
+                    Properties:
+                </p>
+                <ul>
+                    <li>Measures the difference between two probability distributions</li>
+                    <li>Assumes targets are in the range [0, 1]</li>
+                    <li>Often used with sigmoid activation for the last layer</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Cross-Entropy Loss</strong>: For multi-class classification tasks:
+                <div class="formula">
+                    \[\text{CE} = -\frac{1}{n} \sum_{i=1}^{n} \sum_{c=1}^{C} y_{i,c} \log(\hat{y}_{i,c})\]
+                </div>
+                <p>
+                    where \(C\) is the number of classes, and \(y_{i,c}\) is 1 if sample \(i\) belongs to class \(c\) and 0 otherwise.
+                </p>
+                <p>
+                    Properties:
+                </p>
+                <ul>
+                    <li>Generalizes BCE to multiple classes</li>
+                    <li>Often used with softmax activation for the last layer</li>
+                    <li>Optimizes for maximum likelihood estimation</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Focal Loss</strong>: Addresses class imbalance by down-weighting well-classified examples <sup>[4]</sup>:
+                <div class="formula">
+                    \[\text{FL}(p_t) = -\alpha_t (1 - p_t)^{\gamma} \log(p_t)\]
+                </div>
+                <p>
+                    where \(p_t\) is the model's estimated probability for the true class, \(\alpha_t\) is a balancing factor, and \(\gamma\) is a focusing parameter that reduces the loss for well-classified examples.
+                </p>
+                <p>
+                    Properties:
+                </p>
+                <ul>
+                    <li>Focuses training on hard, misclassified examples</li>
+                    <li>Effective for datasets with severe class imbalance</li>
+                    <li>Reduces to cross-entropy when \(\gamma = 0\)</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>1.4 Advanced Loss Functions</h3>
+        <p>
+            Advanced loss functions address specific challenges in neural network training:
+        </p>
+        <ol>
+            <li>
+                <strong>Kullback-Leibler (KL) Divergence</strong>: Measures the difference between two probability distributions <sup>[5]</sup>:
+                <div class="formula">
+                    \[\text{KL}(P || Q) = \sum_{i} P(i) \log\frac{P(i)}{Q(i)}\]
+                </div>
+                <p>
+                    Used in variational autoencoders and knowledge distillation.
+                </p>
+            </li>
+            <li>
+                <strong>Contrastive Loss</strong>: Brings similar samples closer and pushes dissimilar samples apart in the feature space <sup>[6]</sup>:
+                <div class="formula">
+                    \[L(y, d) = (1-y) \frac{1}{2} d^2 + y \frac{1}{2} \{\max(0, m - d)\}^2\]
+                </div>
+                <p>
+                    where \(y\) is 1 for similar pairs and 0 for dissimilar pairs, \(d\) is the distance between samples, and \(m\) is a margin.
+                </p>
+            </li>
+            <li>
+                <strong>Triplet Loss</strong>: Ensures that an anchor sample is closer to a positive sample than to a negative sample <sup>[7]</sup>:
+                <div class="formula">
+                    \[L(a, p, n) = \max(d(a, p) - d(a, n) + \text{margin}, 0)\]
+                </div>
+                <p>
+                    where \(a\), \(p\), and \(n\) are the anchor, positive, and negative samples, respectively, and \(d\) is a distance function.
+                </p>
+            </li>
+        </ol>
+
+        <div class="note">
+            <p>
+                The choice of loss function should be guided by the specific task (regression, classification, etc.), the nature of the data (presence of outliers, class imbalance, etc.), and the desired properties of the model predictions.
+            </p>
+        </div>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>2. Optimizers</h2>
+        
+        <h3>2.1 Gradient Descent</h3>
+        <p>
+            Gradient descent is the foundation of most optimization algorithms used in deep learning. It iteratively updates model parameters in the direction that reduces the loss function <sup>[8]</sup>:
+        </p>
+        <div class="formula">
+            \[\theta_{t+1} = \theta_t - \alpha \nabla_\theta L(\theta_t)\]
+        </div>
+        <p>
+            where \(\theta_t\) is the parameter vector at iteration \(t\), \(\alpha\) is the learning rate, and \(\nabla_\theta L(\theta_t)\) is the gradient of the loss function with respect to the parameters.
+        </p>
+
+        <p>
+            There are three main variants of gradient descent:
+        </p>
+        <ol>
+            <li>
+                <strong>Batch Gradient Descent</strong>: Computes the gradient over the entire dataset:
+                <div class="formula">
+                    \[\nabla_\theta L(\theta) = \nabla_\theta \frac{1}{n} \sum_{i=1}^{n} L(f_\theta(x_i), y_i)\]
+                </div>
+                <p>
+                    Pros: Stable convergence, accurate gradient estimation.
+                </p>
+                <p>
+                    Cons: Computationally expensive for large datasets, slow convergence.
+                </p>
+            </li>
+            <li>
+                <strong>Stochastic Gradient Descent (SGD)</strong>: Computes the gradient using a single random sample:
+                <div class="formula">
+                    \[\nabla_\theta L(\theta) \approx \nabla_\theta L(f_\theta(x_i), y_i)\]
+                </div>
+                <p>
+                    Pros: Fast updates, can escape local minima, works well with large datasets.
+                </p>
+                <p>
+                    Cons: High variance in updates, noisy convergence.
+                </p>
+            </li>
+            <li>
+                <strong>Mini-batch Gradient Descent</strong>: Computes the gradient using a small batch of samples:
+                <div class="formula">
+                    \[\nabla_\theta L(\theta) \approx \nabla_\theta \frac{1}{m} \sum_{i=1}^{m} L(f_\theta(x_i), y_i)\]
+                </div>
+                <p>
+                    where \(m\) is the batch size, typically between 32 and 512.
+                </p>
+                <p>
+                    Pros: Balance between computational efficiency and update quality, enables vectorization.
+                </p>
+                <p>
+                    Cons: Requires tuning the batch size hyperparameter.
+                </p>
+            </li>
+        </ol>
+
+        <h3>2.2 Advanced Optimization Algorithms</h3>
+        <p>
+            Several advanced optimization algorithms have been developed to address the limitations of basic gradient descent:
+        </p>
+
+        <div class="concept-container">
+            <div class="concept-box">
+                <h3>Momentum</h3>
+                <p>
+                    Adds a fraction of the previous update to the current update, helping to dampen oscillations and accelerate convergence <sup>[9]</sup>:
+                </p>
+                <div class="formula">
+                    \begin{align}
+                    v_{t+1} &= \gamma v_t + \alpha \nabla_\theta L(\theta_t) \\
+                    \theta_{t+1} &= \theta_t - v_{t+1}
+                    \end{align}
+                </div>
+                <p>
+                    where \(\gamma\) is the momentum coefficient, typically 0.9.
+                </p>
+                <p>
+                    Benefits:
+                </p>
+                <ul>
+                    <li>Speeds up convergence</li>
+                    <li>Smooths oscillations in gradients</li>
+                    <li>Helps escape shallow local minima</li>
+                </ul>
+            </div>
+            <div class="concept-box">
+                <h3>Nesterov Accelerated Gradient (NAG)</h3>
+                <p>
+                    A modification of momentum that calculates the gradient at the "lookahead" position <sup>[10]</sup>:
+                </p>
+                <div class="formula">
+                    \begin{align}
+                    v_{t+1} &= \gamma v_t + \alpha \nabla_\theta L(\theta_t - \gamma v_t) \\
+                    \theta_{t+1} &= \theta_t - v_{t+1}
+                    \end{align}
+                </div>
+                <p>
+                    Benefits:
+                </p>
+                <ul>
+                    <li>Provides a form of anticipatory update</li>
+                    <li>Often converges faster than standard momentum</li>
+                    <li>More responsive to changes in the loss landscape</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="concept-container">
+            <div class="concept-box">
+                <h3>Adagrad</h3>
+                <p>
+                    Adapts the learning rate for each parameter based on the historical gradients <sup>[11]</sup>:
+                </p>
+                <div class="formula">
+                    \begin{align}
+                    G_{t+1} &= G_t + (\nabla_\theta L(\theta_t))^2 \\
+                    \theta_{t+1} &= \theta_t - \frac{\alpha}{\sqrt{G_{t+1} + \epsilon}} \nabla_\theta L(\theta_t)
+                    \end{align}
+                </div>
+                <p>
+                    where the operation is element-wise, and \(\epsilon\) is a small constant for numerical stability.
+                </p>
+                <p>
+                    Benefits:
+                </p>
+                <ul>
+                    <li>Adapts learning rates to the geometry of the data</li>
+                    <li>Works well for sparse gradients</li>
+                    <li>Eliminates the need to manually tune the learning rate</li>
+                </ul>
+                <p>
+                    Limitation: Accumulates the sum of squared gradients in the denominator, which can cause the learning rate to become very small over time.
+                </p>
+            </div>
+            <div class="concept-box">
+                <h3>RMSprop</h3>
+                <p>
+                    Modifies Adagrad to use an exponentially weighted moving average instead of accumulating all past squared gradients <sup>[12]</sup>:
+                </p>
+                <div class="formula">
+                    \begin{align}
+                    G_{t+1} &= \beta G_t + (1 - \beta)(\nabla_\theta L(\theta_t))^2 \\
+                    \theta_{t+1} &= \theta_t - \frac{\alpha}{\sqrt{G_{t+1} + \epsilon}} \nabla_\theta L(\theta_t)
+                    \end{align}
+                </div>
+                <p>
+                    where \(\beta\) is typically 0.9.
+                </p>
+                <p>
+                    Benefits:
+                </p>
+                <ul>
+                    <li>Prevents the learning rate from decreasing too rapidly</li>
+                    <li>Works well in non-stationary settings</li>
+                    <li>Suitable for RNNs and online learning scenarios</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="concept-container">
+            <div class="concept-box">
+                <h3>Adam (Adaptive Moment Estimation)</h3>
+                <p>
+                    Combines the ideas of momentum and RMSprop to adapt the learning rate for each parameter <sup>[13]</sup>:
+                </p>
+                <div class="formula">
+                    \begin{align}
+                    m_{t+1} &= \beta_1 m_t + (1 - \beta_1) \nabla_\theta L(\theta_t) \\
+                    v_{t+1} &= \beta_2 v_t + (1 - \beta_2) (\nabla_\theta L(\theta_t))^2 \\
+                    \hat{m}_{t+1} &= \frac{m_{t+1}}{1 - \beta_1^{t+1}} \\
+                    \hat{v}_{t+1} &= \frac{v_{t+1}}{1 - \beta_2^{t+1}} \\
+                    \theta_{t+1} &= \theta_t - \frac{\alpha \hat{m}_{t+1}}{\sqrt{\hat{v}_{t+1}} + \epsilon}
+                    \end{align}
+                </div>
+                <p>
+                    where \(\beta_1\) is typically 0.9, \(\beta_2\) is typically 0.999, and \(\hat{m}_{t+1}\) and \(\hat{v}_{t+1}\) are bias-corrected estimates.
+                </p>
+                <p>
+                    Benefits:
+                </p>
+                <ul>
+                    <li>Combines the advantages of momentum and adaptive learning rates</li>
+                    <li>Handles sparse gradients well</li>
+                    <li>Often the optimizer of choice for many deep learning tasks</li>
+                </ul>
+            </div>
+            <div class="concept-box">
+                <h3>AdamW</h3>
+                <p>
+                    A variant of Adam that correctly implements weight decay regularization <sup>[14]</sup>:
+                </p>
+                <div class="formula">
+                    \begin{align}
+                    m_{t+1} &= \beta_1 m_t + (1 - \beta_1) \nabla_\theta L(\theta_t) \\
+                    v_{t+1} &= \beta_2 v_t + (1 - \beta_2) (\nabla_\theta L(\theta_t))^2 \\
+                    \hat{m}_{t+1} &= \frac{m_{t+1}}{1 - \beta_1^{t+1}} \\
+                    \hat{v}_{t+1} &= \frac{v_{t+1}}{1 - \beta_2^{t+1}} \\
+                    \theta_{t+1} &= \theta_t - \frac{\alpha \hat{m}_{t+1}}{\sqrt{\hat{v}_{t+1}} + \epsilon} - \alpha \lambda \theta_t
+                    \end{align}
+                </div>
+                <p>
+                    where \(\lambda\) is the weight decay coefficient.
+                </p>
+                <p>
+                    Benefits:
+                </p>
+                <ul>
+                    <li>Properly separates weight decay from gradient updates</li>
+                    <li>Better generalization compared to standard Adam</li>
+                    <li>State-of-the-art performance on many tasks</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>2.3 Learning Rate Scheduling</h3>
+        <p>
+            Learning rate scheduling adjusts the learning rate during training to improve convergence and performance <sup>[15]</sup>:
+        </p>
+        <ol>
+            <li>
+                <strong>Step Decay</strong>: Reduces the learning rate by a factor after a fixed number of epochs:
+                <div class="formula">
+                    \[\alpha_t = \alpha_0 \times \gamma^{\lfloor t / s \rfloor}\]
+                </div>
+                <p>
+                    where \(\gamma\) is the decay factor (e.g., 0.1), and \(s\) is the step size (e.g., 30 epochs).
+                </p>
+            </li>
+            <li>
+                <strong>Exponential Decay</strong>: Continuously reduces the learning rate exponentially:
+                <div class="formula">
+                    \[\alpha_t = \alpha_0 \times \gamma^t\]
+                </div>
+                <p>
+                    where \(\gamma\) is the decay rate (e.g., 0.95).
+                </p>
+            </li>
+            <li>
+                <strong>Cosine Annealing</strong>: Cyclically varies the learning rate with a cosine schedule <sup>[16]</sup>:
+                <div class="formula">
+                    \[\alpha_t = \alpha_{min} + \frac{1}{2}(\alpha_{max} - \alpha_{min})(1 + \cos(\frac{t\pi}{T}))\]
+                </div>
+                <p>
+                    where \(T\) is the total number of iterations.
+                </p>
+            </li>
+            <li>
+                <strong>Reduce on Plateau</strong>: Reduces the learning rate when a metric stops improving:
+                <div class="formula">
+                    \[\alpha_t = \alpha_{t-1} \times \gamma \quad \text{if no improvement for } p \text{ epochs}\]
+                </div>
+                <p>
+                    where \(p\) is the patience parameter.
+                </p>
+            </li>
+        </ol>
+
+        <figure>
+            <div style="text-align: center;">
+                <svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Axes -->
+                    <line x1="50" y1="350" x2="550" y2="350" stroke="black" stroke-width="2" />
+                    <line x1="50" y1="50" x2="50" y2="350" stroke="black" stroke-width="2" />
+                    
+                    <!-- X-axis label -->
+                    <text x="300" y="390" text-anchor="middle" font-size="16">Training Iterations</text>
+                    
+                    <!-- Y-axis label -->
+                    <text x="20" y="200" text-anchor="middle" font-size="16" transform="rotate(-90, 20, 200)">Learning Rate</text>
+                    
+                    <!-- Step Decay -->
+                    <polyline points="50,100 150,100 150,175 250,175 250,250 350,250 350,325 550,325" 
+                              fill="none" stroke="#e74c3c" stroke-width="3" />
+                    
+                    <!-- Exponential Decay -->
+                    <path d="M 50,100 Q 150,150 250,200 Q 350,250 450,300 Q 500,325 550,335" 
+                          fill="none" stroke="#3498db" stroke-width="3" />
+                    
+                    <!-- Cosine Annealing -->
+                    <path d="M 50,100 Q 100,250 150,100 Q 200,250 250,100 Q 300,250 350,100 Q 400,250 450,100 Q 500,250 550,100" 
+                          fill="none" stroke="#2ecc71" stroke-width="3" stroke-dasharray="5,5" />
+                    
+                    <!-- Legend -->
+                    <rect x="400" y="50" width="150" height="80" fill="white" stroke="black" />
+                    <line x1="410" y1="70" x2="430" y2="70" stroke="#e74c3c" stroke-width="3" />
+                    <text x="440" y="75" font-size="14">Step Decay</text>
+                    <line x1="410" y1="95" x2="430" y2="95" stroke="#3498db" stroke-width="3" />
+                    <text x="440" y="100" font-size="14">Exponential</text>
+                    <line x1="410" y1="120" x2="430" y2="120" stroke="#2ecc71" stroke-width="3" stroke-dasharray="5,5" />
+                    <text x="440" y="125" font-size="14">Cosine Annealing</text>
+                </svg>
+            </div>
+            <figcaption>Figure 1: Common learning rate scheduling strategies</figcaption>
+        </figure>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>3. Training Loops</h2>
+        
+		<h3>3.1 Basic Training Loop Structure</h3>
+        <p>
+            The standard training loop in deep learning consists of several key components <sup>[17]</sup>:
+        </p>
+        <ol>
+            <li><strong>Initialization</strong>: Set up the model, loss function, optimizer, and training parameters</li>
+            <li><strong>Forward Pass</strong>: Compute model predictions for a batch of data</li>
+            <li><strong>Loss Computation</strong>: Calculate the loss between predictions and ground truth</li>
+            <li><strong>Backward Pass</strong>: Compute gradients of the loss with respect to model parameters</li>
+            <li><strong>Parameter Updates</strong>: Update model parameters using the optimizer</li>
+            <li><strong>Metric Evaluation</strong>: Track performance metrics during training</li>
+        </ol>
+
+        <p>
+            Mathematically, each iteration of the training loop implements:
+        </p>
+        <div class="formula">
+            \begin{align}
+            \hat{y} &= f_\theta(X_{\text{batch}}) \\
+            L &= \mathcal{L}(\hat{y}, y_{\text{batch}}) \\
+            \nabla_\theta L &= \frac{\partial L}{\partial \theta} \\
+            \theta &= \text{optimizer.step}(\theta, \nabla_\theta L)
+            \end{align}
+        </div>
+
+        <div class="example">
+            <h4>Epoch vs. Iteration</h4>
+            <p>
+                In deep learning terminology:
+            </p>
+            <ul>
+                <li><strong>Iteration</strong>: One update of the model parameters using a single batch of data</li>
+                <li><strong>Epoch</strong>: One complete pass through the entire training dataset</li>
+            </ul>
+            <p>
+                The number of iterations per epoch is:
+            </p>
+            <div class="formula">
+                \[\text{iterations per epoch} = \lceil \frac{\text{dataset size}}{\text{batch size}} \rceil\]
+            </div>
+        </div>
+
+        <h3>3.2 Validation During Training</h3>
+        <p>
+            Validation is the process of evaluating model performance on data not used for training, which helps detect overfitting <sup>[18]</sup>:
+        </p>
+        <ol>
+            <li>
+                <strong>Train-Validation Split</strong>: Typically 70-80% for training, 20-30% for validation
+            </li>
+            <li>
+                <strong>Validation Frequency</strong>: Evaluate after each epoch or a fixed number of iterations
+            </li>
+            <li>
+                <strong>Metrics</strong>: Track both training and validation metrics (loss, accuracy, etc.)
+            </li>
+            <li>
+                <strong>Early Stopping</strong>: Stop training when validation performance plateaus or degrades
+            </li>
+        </ol>
+
+        <div class="note">
+            <p>
+                During validation, it's important to:
+            </p>
+            <ul>
+                <li>Set the model to evaluation mode (<code>model.eval()</code>)</li>
+                <li>Disable gradient computation (<code>torch.no_grad()</code>)</li>
+                <li>Disable dropout and use batch statistics for batch normalization</li>
+            </ul>
+            <p>
+                These steps ensure that validation accurately reflects model performance during inference.
+            </p>
+        </div>
+
+        <h3>3.3 Advanced Training Techniques</h3>
+        <p>
+            Several advanced techniques can improve training efficiency and model performance:
+        </p>
+        <ol>
+            <li>
+                <strong>Gradient Accumulation</strong>: Accumulate gradients over multiple forward-backward passes before updating parameters, enabling training with larger effective batch sizes on limited memory <sup>[19]</sup>:
+                <div class="formula">
+                    \[\nabla_\theta L_{\text{accumulated}} = \sum_{i=1}^{n} \nabla_\theta L_i\]
+                </div>
+                <p>
+                    where \(n\) is the number of accumulation steps.
+                </p>
+            </li>
+            <li>
+                <strong>Gradient Clipping</strong>: Limit the gradient magnitude to prevent exploding gradients <sup>[20]</sup>:
+                <div class="formula">
+                    \[\nabla_\theta L_{\text{clipped}} = 
+                    \begin{cases}
+                    \nabla_\theta L & \text{if } \|\nabla_\theta L\| \leq \text{threshold} \\
+                    \text{threshold} \frac{\nabla_\theta L}{\|\nabla_\theta L\|} & \text{otherwise}
+                    \end{cases}\]
+                </div>
+            </li>
+            <li>
+                <strong>Mixed Precision Training</strong>: Use lower precision (e.g., float16) for some operations to speed up training and reduce memory usage <sup>[21]</sup>:
+                <ul>
+                    <li>Store model parameters and activations in float16</li>
+                    <li>Keep a master copy of weights in float32</li>
+                    <li>Perform the forward and backward passes in float16</li>
+                    <li>Update the master weights in float32</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>3.4 Learning Rate Warmup</h3>
+        <p>
+            Learning rate warmup gradually increases the learning rate from a small value to the initial learning rate over a number of iterations <sup>[22]</sup>:
+        </p>
+        <div class="formula">
+            \[\alpha_t = \alpha_{\text{target}} \times \min\left(1, \frac{t}{\text{warmup\_steps}}\right)\]
+        </div>
+        <p>
+            Benefits of learning rate warmup:
+        </p>
+        <ul>
+            <li>Stabilizes training in the early stages</li>
+            <li>Helps models escape poor initial local minima</li>
+            <li>Allows training with larger learning rates</li>
+            <li>Particularly effective for transformers and very deep networks</li>
+        </ul>
+        
+        <figure>
+            <div style="text-align: center;">
+                <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Axes -->
+                    <line x1="50" y1="250" x2="550" y2="250" stroke="black" stroke-width="2" />
+                    <line x1="50" y1="50" x2="50" y2="250" stroke="black" stroke-width="2" />
+                    
+                    <!-- X-axis label -->
+                    <text x="300" y="290" text-anchor="middle" font-size="16">Training Iterations</text>
+                    
+                    <!-- Y-axis label -->
+                    <text x="20" y="150" text-anchor="middle" font-size="16" transform="rotate(-90, 20, 150)">Learning Rate</text>
+                    
+                    <!-- Warmup phase -->
+                    <line x1="50" y1="250" x2="150" y2="100" stroke="#e74c3c" stroke-width="3" />
+                    
+                    <!-- Constant phase -->
+                    <line x1="150" y1="100" x2="300" y2="100" stroke="#e74c3c" stroke-width="3" />
+                    
+                    <!-- Decay phase -->
+                    <path d="M 300,100 Q 400,150 500,200 Q 525,225 550,250" 
+                          fill="none" stroke="#e74c3c" stroke-width="3" />
+                    
+                    <!-- Annotations -->
+                    <text x="100" y="140" text-anchor="middle" font-size="14">Warmup</text>
+                    <text x="225" y="80" text-anchor="middle" font-size="14">Constant LR</text>
+                    <text x="425" y="170" text-anchor="middle" font-size="14">Decay</text>
+                    
+                    <!-- Vertical division lines -->
+                    <line x1="150" y1="50" x2="150" y2="250" stroke="black" stroke-width="1" stroke-dasharray="5,5" />
+                    <line x1="300" y1="50" x2="300" y2="250" stroke="black" stroke-width="1" stroke-dasharray="5,5" />
+                </svg>
+            </div>
+            <figcaption>Figure 2: Learning rate schedule with warmup, constant phase, and decay</figcaption>
+        </figure>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>4. Advanced Training Methods</h2>
+        
+        <h3>4.1 Transfer Learning</h3>
+        <p>
+            Transfer learning leverages knowledge gained from one task to improve performance on another task <sup>[23]</sup>. The process typically involves:
+        </p>
+        <ol>
+            <li><strong>Pre-training</strong>: Train a model on a large source dataset</li>
+            <li><strong>Transfer</strong>: Initialize a new model with the pre-trained weights</li>
+            <li><strong>Fine-tuning</strong>: Adapt the model to the target task</li>
+        </ol>
+
+        <p>
+            Common transfer learning approaches include:
+        </p>
+        <ol>
+            <li>
+                <strong>Feature Extraction</strong>: Freeze pre-trained layers and train only new layers:
+                <div class="formula">
+                    \[\theta_{\text{target}} = \{\theta_{\text{pre-trained}}^{\text{frozen}}, \theta_{\text{new}}^{\text{trainable}}\}\]
+                </div>
+            </li>
+            <li>
+                <strong>Fine-Tuning</strong>: Train all layers but with different learning rates:
+                <div class="formula">
+                    \[\alpha_{\text{pre-trained}} \ll \alpha_{\text{new}}\]
+                </div>
+            </li>
+        </ol>
+
+        <div class="note">
+            <p>
+                Transfer learning is particularly effective when:
+            </p>
+            <ul>
+                <li>The source and target tasks share common features</li>
+                <li>The source dataset is much larger than the target dataset</li>
+                <li>The pre-training task is complex enough to learn useful representations</li>
+            </ul>
+        </div>
+
+        <h3>4.2 Batch Normalization Considerations</h3>
+        <p>
+            Batch Normalization (BatchNorm) normalizes activations within mini-batches, but requires special handling during training and inference <sup>[24]</sup>:
+        </p>
+        <ol>
+            <li>
+                <strong>Training Mode</strong>: Uses batch statistics and updates running statistics:
+                <div class="formula">
+                    \begin{align}
+                    \hat{x} &= \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} \\
+                    \mu_{\text{running}} &= (1 - \text{momentum}) \cdot \mu_{\text{running}} + \text{momentum} \cdot \mu_B \\
+                    \sigma^2_{\text{running}} &= (1 - \text{momentum}) \cdot \sigma^2_{\text{running}} + \text{momentum} \cdot \sigma_B^2
+                    \end{align}
+                </div>
+            </li>
+            <li>
+                <strong>Evaluation Mode</strong>: Uses running statistics instead of batch statistics:
+                <div class="formula">
+                    \[\hat{x} = \frac{x - \mu_{\text{running}}}{\sqrt{\sigma^2_{\text{running}} + \epsilon}}\]
+                </div>
+            </li>
+        </ol>
+
+        <p>
+            Challenges with Batch Normalization:
+        </p>
+        <ul>
+            <li>Small batch sizes lead to noisy statistics</li>
+            <li>Recurrent networks may need layer normalization instead</li>
+            <li>Multi-GPU training requires synchronized BatchNorm</li>
+        </ul>
+
+        <h3>4.3 Regularization Techniques</h3>
+        <p>
+            Regularization prevents overfitting by constraining the model capacity or adding noise during training <sup>[25]</sup>:
+        </p>
+        <ol>
+            <li>
+                <strong>Weight Decay (L2 Regularization)</strong>: Penalizes large weights by adding a term to the loss function:
+                <div class="formula">
+                    \[L_{\text{regularized}} = L + \lambda \sum_i \theta_i^2\]
+                </div>
+                <p>
+                    where \(\lambda\) is the regularization strength.
+                </p>
+            </li>
+            <li>
+                <strong>Dropout</strong>: Randomly sets a fraction of activations to zero during training <sup>[26]</sup>:
+                <div class="formula">
+                    \[h = \frac{1}{1-p}(r * a)\]
+                </div>
+                <p>
+                    where \(a\) is the activation vector, \(r\) is a binary mask with zeros occurring with probability \(p\), and the factor \(\frac{1}{1-p}\) ensures that the expected sum of the outputs remains the same.
+                </p>
+            </li>
+            <li>
+                <strong>Data Augmentation</strong>: Artificially increases the training set size by applying transformations:
+                <ul>
+                    <li>Images: rotation, flipping, cropping, color jittering</li>
+                    <li>Text: synonym replacement, back-translation</li>
+                    <li>Audio: time stretching, pitch shifting, adding noise</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>4.4 Multi-GPU Training</h3>
+        <p>
+            Training on multiple GPUs can significantly reduce training time through parallelization <sup>[27]</sup>:
+        </p>
+        <ol>
+            <li>
+                <strong>Data Parallelism</strong>: Split the batch across multiple GPUs:
+                <div class="formula">
+                    \[\nabla_\theta L = \frac{1}{n} \sum_{i=1}^{n} \nabla_\theta L_i\]
+                </div>
+                <p>
+                    where \(n\) is the number of GPUs, and \(L_i\) is the loss computed on GPU \(i\).
+                </p>
+                <p>
+                    Implementation options:
+                </p>
+                <ul>
+                    <li><code>nn.DataParallel</code>: Simple but with synchronization overhead</li>
+                    <li><code>nn.parallel.DistributedDataParallel</code>: More efficient with better scaling</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Model Parallelism</strong>: Split the model across multiple GPUs:
+                <ul>
+                    <li>Different layers on different GPUs</li>
+                    <li>Useful for very large models that don't fit on a single GPU</li>
+                    <li>Introduces sequential dependencies that can limit speedup</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Pipeline Parallelism</strong>: Combine data and model parallelism with micro-batching:
+                <ul>
+                    <li>Split the model into stages across GPUs</li>
+                    <li>Process micro-batches in a pipelined fashion</li>
+                    <li>Balance computation and communication</li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>Conclusion</h2>
+        <p>
+            Training deep neural networks effectively requires a combination of proper loss function selection, optimization algorithm choice, and advanced training techniques. PyTorch provides a flexible framework for implementing these components and experimenting with different approaches.
+        </p>
+        <p>
+            Key considerations for effective model training include:
+        </p>
+        <ul>
+            <li>Selecting appropriate loss functions for your task</li>
+            <li>Choosing and configuring optimizers with suitable hyperparameters</li>
+            <li>Implementing robust training and validation loops</li>
+            <li>Applying advanced techniques like learning rate scheduling, transfer learning, and regularization</li>
+            <li>Scaling training across multiple GPUs when necessary</li>
+        </ul>
+        <p>
+            By understanding the mathematical foundations and best practices covered in this chapter, you can develop efficient training procedures that lead to better-performing models with improved convergence properties and generalization capabilities.
+        </p>
+        <p>
+            In the next chapter, we will explore how to save and load trained models, deploy them for inference, and optimize them for production environments.
+        </p>
+    </section>
+
+    <div class="section-separator"></div>
+
+    <section>
+        <h2>References</h2>
+        <ol>
+            <li class="reference">[1] Lehmann, E. L., & Casella, G. (1998). Theory of point estimation (2nd ed.). Springer.</li>
+            <li class="reference">[2] Huber, P. J. (1964). Robust estimation of a location parameter. The Annals of Mathematical Statistics, 35(1), 73-101.</li>
+            <li class="reference">[3] Bishop, C. M. (2006). Pattern recognition and machine learning. Springer.</li>
+            <li class="reference">[4] Lin, T. Y., Goyal, P., Girshick, R., He, K., & Dollár, P. (2017). Focal loss for dense object detection. In Proceedings of the IEEE international conference on computer vision (pp. 2980-2988).</li>
+            <li class="reference">[5] Kullback, S., & Leibler, R. A. (1951). On information and sufficiency. The Annals of Mathematical Statistics, 22(1), 79-86.</li>
+            <li class="reference">[6] Hadsell, R., Chopra, S., & LeCun, Y. (2006). Dimensionality reduction by learning an invariant mapping. In 2006 IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'06) (Vol. 2, pp. 1735-1742).</li>
+            <li class="reference">[7] Schroff, F., Kalenichenko, D., & Philbin, J. (2015). FaceNet: A unified embedding for face recognition and clustering. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 815-823).</li>
+            <li class="reference">[8] Ruder, S. (2016). An overview of gradient descent optimization algorithms. arXiv preprint arXiv:1609.04747.</li>
+            <li class="reference">[9] Polyak, B. T. (1964). Some methods of speeding up the convergence of iteration methods. USSR Computational Mathematics and Mathematical Physics, 4(5), 1-17.</li>
+            <li class="reference">[10] Nesterov, Y. E. (1983). A method for solving the convex programming problem with convergence rate O(1/k^2). Dokl. Akad. Nauk SSSR, 269, 543-547.</li>
+            <li class="reference">[11] Duchi, J., Hazan, E., & Singer, Y. (2011). Adaptive subgradient methods for online learning and stochastic optimization. Journal of Machine Learning Research, 12(Jul), 2121-2159.</li>
+            <li class="reference">[12] Tieleman, T., & Hinton, G. (2012). Lecture 6.5-rmsprop: Divide the gradient by a running average of its recent magnitude. COURSERA: Neural networks for machine learning, 4(2), 26-31.</li>
+            <li class="reference">[13] Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization. arXiv preprint arXiv:1412.6980.</li>
+            <li class="reference">[14] Loshchilov, I., & Hutter, F. (2017). Decoupled weight decay regularization. arXiv preprint arXiv:1711.05101.</li>
+            <li class="reference">[15] Smith, L. N. (2017). Cyclical learning rates for training neural networks. In 2017 IEEE Winter Conference on Applications of Computer Vision (WACV) (pp. 464-472).</li>
+            <li class="reference">[16] Loshchilov, I., & Hutter, F. (2016). SGDR: Stochastic gradient descent with warm restarts. arXiv preprint arXiv:1608.03983.</li>
+            <li class="reference">[17] Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep learning. MIT press.</li>
+            <li class="reference">[18] Hastie, T., Tibshirani, R., & Friedman, J. (2009). The elements of statistical learning: data mining, inference, and prediction. Springer Science & Business Media.</li>
+            <li class="reference">[19] Ott, M., Edunov, S., Baevski, A., Fan, A., Gross, S., Ng, N., ... & Auli, M. (2019). fairseq: A fast, extensible toolkit for sequence modeling. arXiv preprint arXiv:1904.01038.</li>
+            <li class="reference">[20] Pascanu, R., Mikolov, T., & Bengio, Y. (2013). On the difficulty of training recurrent neural networks. In International conference on machine learning (pp. 1310-1318).</li>
+            <li class="reference">[21] Micikevicius, P., Narang, S., Alben, J., Diamos, G., Elsen, E., Garcia, D., ... & Wu, H. (2017). Mixed precision training. arXiv preprint arXiv:1710.03740.</li>
+            <li class="reference">[22] Goyal, P., Dollár, P., Girshick, R., Noordhuis, P., Wesolowski, L., Kyrola, A., ... & He, K. (2017). Accurate, large minibatch sgd: Training imagenet in 1 hour. arXiv preprint arXiv:1706.02677.</li>
+            <li class="reference">[23] Pan, S. J., & Yang, Q. (2009). A survey on transfer learning. IEEE Transactions on knowledge and data engineering, 22(10), 1345-1359.</li>
+            <li class="reference">[24] Ioffe, S., & Szegedy, C. (2015). Batch normalization: Accelerating deep network training by reducing internal covariate shift. In International conference on machine learning (pp. 448-456).</li>
+            <li class="reference">[25] Kukanevich, P. (2018). Regularization: an important concept in machine learning. Towards Data Science.</li>
+            <li class="reference">[26] Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., & Salakhutdinov, R. (2014). Dropout: a simple way to prevent neural networks from overfitting. The journal of machine learning research, 15(1), 1929-1958.</li>
+            <li class="reference">[27] Ben-Nun, T., & Hoefler, T. (2019). Demystifying parallel and distributed deep learning: An in-depth concurrency analysis. ACM Computing Surveys (CSUR), 52(4), 1-43.</li>
+        </ol>
+    </section>
+</body>
+</html>
