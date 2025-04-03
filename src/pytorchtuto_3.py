@@ -29,6 +29,10 @@ By the end of this notebook, you will understand how to design and implement neu
 
 Let’s get started!
 ---
+
+<a href="https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_3.ipynb" target="_blank">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 """
 
 import torch

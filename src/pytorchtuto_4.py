@@ -28,6 +28,10 @@ By the end of this notebook, you will understand how to effectively train neural
 ---
 
 Let’s get started!
+
+<a href="https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_4.ipynb" target="_blank">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 """
 
 import torch
