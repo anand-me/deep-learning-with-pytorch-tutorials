@@ -30,20 +30,27 @@ These tutorials are intended to be beginner-friendly while gradually introducing
    - Basic Tensor Operations  
    - Tensor Manipulation  
 
-2. **Autograd and Automatic Differentiation**  
-   - Gradients and Backpropagation  
-   - Computational Graphs  
+2. **Autograd and Automatic Differentiation**   
+   - Understanding Gradients
+   - Computational Graphs
+   - Gradients Tracking and Management
 
-3. **Building Neural Networks**  
-   - Layers and Activation Functions  
-   - Forward and Backward Passes  
+3. **Building Neural Networks with PyTorch**  
+   - PyTorch's nn Module  
+   - Building Neural Network Layers
+   - Activation Functions
+   - Creating Complete Network Architectures
 
 4. **Training Models**  
    - Loss Functions  
-   - Optimizers  
+   - Optimizers
+   - Training Loops
+   - Validation and Testing
 
 5. **Saving and Loading Models**  
-   - Serialization in PyTorch  
+   - Serialization in PyTorch
+   - Loading Pretrained Models
+   - Model Deployment Basics
 
 ---
 
@@ -70,7 +77,7 @@ Tensors are multi-dimensional arrays that can represent data in various shapes a
 import torch
 
 print("=" * 50)
-print("UNDERSTANDING TENSORS")
+print("1. UNDERSTANDING TENSORS")
 print("=" * 50)
 
 """### Hierarchy of Tensors (OD, 1D, 2D, 3D, ....)"""
@@ -158,7 +165,7 @@ else:
 ## 2. Basic Tensor Operations
 
 print("=" * 50)
-print("BASIC TENSOR OPERATIONS")
+print("2. BASIC TENSOR OPERATIONS")
 print("=" * 50)
 
 # Create tensors
@@ -215,7 +222,7 @@ print(f"Logical OR: {(e > 2) | (f > 1)}")
 ## 3. Tensor Manipulation
 
 print("=" * 50)
-print("TENSOR MANIPULATION")
+print("3. TENSOR MANIPULATION")
 print("=" * 50)
 
 # Reshaping tensors
@@ -309,9 +316,3 @@ print(f"Cloned and modified tensor: {n_clone}")
 print("=" * 50)
 print("Tensors Tutorial Completed!")
 print("=" * 50)
-
-"""**Basics**"""
-
-
-
-"""**lets import PyTorch**"""
