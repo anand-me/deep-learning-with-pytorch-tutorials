@@ -198,8 +198,26 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">⭐ Star this repository</a> if you find it helpful!
+  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">⭐ Please Star this repository</a> if you find it helpful!
 </p>
+
+<p align="center">
+  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">
+    <img src="https://img.shields.io/github/stars/anand-me/deep-learning-with-pytorch-tutorials?style=social" alt="GitHub Repo stars">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">
+    <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" width="200" alt="Star the repo">
+  </a>
+</p>
+
+<p align="center">
+  ⭐ **Love this project?** Please consider giving it a **star** to support us! ⭐
+</p>
+
+
 
 <p align="center">
   <img src="https://pytorch.org/assets/images/logo-dark.svg" alt="PyTorch Icon" width="30"/>
