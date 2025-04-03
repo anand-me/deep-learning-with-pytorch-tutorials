@@ -103,11 +103,11 @@ Each tutorial has an "Open in Colab" badge that allows you to run it directly in
 
 | Tutorial | Open in Colab |
 |----------|---------------|
-| 1. Introduction to Tensors | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_1.ipynb) |
-| 2. Autograd and Automatic Differentiation | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_2.ipynb) |
-| 3. Neural Networks with PyTorch | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_3.ipynb) |
-| 4. Training Models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_4.ipynb) |
-| 5. Saving and Loading Models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_5.ipynb) |
+| 1. Introduction to Tensors | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_1.ipynb) |
+| 2. Autograd and Automatic Differentiation | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_2.ipynb) |
+| 3. Neural Networks with PyTorch | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_3.ipynb) |
+| 4. Training Models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_4.ipynb) |
+| 5. Saving and Loading Models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_5.ipynb) |
 
 Running in Colab gives you:
 - Free GPU/TPU access
