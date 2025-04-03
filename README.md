@@ -202,19 +202,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 </p>
 
 
-<a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">
-  <svg width="160" height="50" viewBox="0 0 160 50" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="grad">
-        <stop offset="0%" stop-color="#FFDD44"/>
-        <stop offset="100%" stop-color="#FFAA00"/>
-      </linearGradient>
-    </defs>
-    <rect width="160" height="50" rx="25" fill="url(#grad)"/>
-    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="black" font-size="18" font-weight="bold">⭐ Star Us!</text>
-  </svg>
-</a>
+<p align="center">
+  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">
+    <img src="https://img.shields.io/github/stars/anand-me/deep-learning-with-pytorch-tutorials?style=social" alt="GitHub Repo stars">
+  </a>
+</p>
 
+<p align="center">
+  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">
+    <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" width="200" alt="Star the repo">
+  </a>
+</p>
+
+<p align="center">
+  ⭐ **Love this project?** Please consider giving it a **star** to support us! ⭐
+</p>
 
 
 
