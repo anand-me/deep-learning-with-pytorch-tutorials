@@ -120,24 +120,90 @@ Running in Colab gives you:
    ```bash
    git clone https://github.com/anand-me/deep-learning-with-pytorch-tutorials.git
    cd deep-learning-with-pytorch-tutorials
-   
-   
+   ```
+
 2. Create a virtual environment (optional but recommended):
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate 
-   
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
 ## 📦 Installation Requirements
 
 To ensure a smooth experience, this repository includes both `requirements.txt` and environment YAML files for flexible setup options:
 
 ### Option 1: Using pip
-
 ```bash
 pip install -r requirements.txt
+```
 
-### Option 1: Using jupyter notebook
+### Option 2: Using conda
+```bash
+conda env create -f environment.yml
+conda activate pytorch-tutorials
+```
+
+### Running the Notebooks
+```bash
 jupyter notebook
 # or
 jupyter lab
-Navigate to the src directory and open the desired notebook
+```
+
+Navigate to the `src` directory and open the desired notebook.
+
+## ✨ Key Features
+
+These tutorials stand out due to their:
+
+- **Visual Learning Approach**: Complex concepts explained through intuitive visualizations
+- **Code-First Philosophy**: Learn by doing with executable examples
+- **Progressive Complexity**: Start simple and gradually tackle more complex topics
+- **TensorBoard Integration**: Advanced visualization of model training
+- **Real-world Applications**: Examples that go beyond toy datasets
+- **Mathematical Foundations**: Clear explanations of the theory behind the code
+
+## 👥 Who Is This For
+
+These tutorials are designed for:
+
+- **Students** seeking to understand deep learning fundamentals
+- **Researchers** transitioning to PyTorch from other frameworks
+- **Professionals** looking to implement deep learning in production
+- **Enthusiasts** who want to explore AI/ML concepts
+
+Whether you're a beginner or have experience with other frameworks, these tutorials provide valuable insights into PyTorch's capabilities.
+
+## 🤝 Contributing
+
+Contributions are welcome and greatly appreciated! Here's how you can help:
+
+- **Report bugs**: Open an issue if you find errors or problems
+- **Suggest enhancements**: New tutorials, clearer explanations, or additional examples
+- **Submit pull requests**: Improve code, fix typos, or add content
+
+Please check the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines.
+
+## 🙏 Acknowledgements
+
+These tutorials wouldn't be possible without:
+
+- The **PyTorch team** for creating an amazing framework
+- **Florida State University** for supporting this research
+- The **open-source community** for valuable feedback and contributions
+- **Dr. [Advisor Name]** for guidance and mentorship
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">⭐ Star this repository</a> if you find it helpful!
+</p>
+
+<p align="center">
+  <img src="https://pytorch.org/assets/images/logo-dark.svg" alt="PyTorch Icon" width="30"/>
+  Created with ❤️ by <a href="https://github.com/anand-me">Akshay Anand</a>
+</p>
