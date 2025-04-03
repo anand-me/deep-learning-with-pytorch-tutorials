@@ -120,3 +120,24 @@ Running in Colab gives you:
    ```bash
    git clone https://github.com/anand-me/deep-learning-with-pytorch-tutorials.git
    cd deep-learning-with-pytorch-tutorials
+   
+   
+2. Create a virtual environment (optional but recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate 
+   
+## 📦 Installation Requirements
+
+To ensure a smooth experience, this repository includes both `requirements.txt` and environment YAML files for flexible setup options:
+
+### Option 1: Using pip
+
+```bash
+pip install -r requirements.txt
+
+### Option 1: Using jupyter notebook
+jupyter notebook
+# or
+jupyter lab
+Navigate to the src directory and open the desired notebook
