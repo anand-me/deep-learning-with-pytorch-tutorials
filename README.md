@@ -189,7 +189,7 @@ Please check the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines
 These tutorials wouldn't be possible without:
 
 - The **PyTorch team** for creating an amazing framework
-- The **open-source community** for valuable feedback and contributions
+- The **open-source community** for valuable feedback and contribution
 
 ## 📄 License
 
