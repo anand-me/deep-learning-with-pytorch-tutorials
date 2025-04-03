@@ -34,8 +34,6 @@ Let’s get started!
 </a>
 """
 
-
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
