@@ -50,30 +50,35 @@ Developed by **Akshay Anand** as part of PhD research at **Florida State Univers
 
 This series consists of five interconnected tutorials that guide you from foundational concepts to advanced model deployment:
 
-1. **Introduction to Tensors**
-   - Understanding Tensors
-   - Basic Tensor Operations
-   - Tensor Manipulation
+### 1. Introduction to Tensors
+- Understanding Tensors
+- Basic Tensor Operations
+- Tensor Manipulation
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_1.ipynb)
 
-2. **Autograd and Automatic Differentiation**
-   - Understanding Gradients
-   - Computational Graphs
-   - Gradient Tracking and Management
+### 2. Autograd and Automatic Differentiation
+- Understanding Gradients
+- Computational Graphs
+- Gradient Tracking and Management
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_2.ipynb)
 
-3. **Neural Networks with PyTorch**
-   - PyTorch's nn Module
-   - Building Neural Network Layers
-   - Creating Complete Network Architectures
+### 3. Neural Networks with PyTorch
+- PyTorch's nn Module
+- Building Neural Network Layers
+- Creating Complete Network Architectures
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_3.ipynb)
 
-4. **Training Models**
-   - Loss Functions
-   - Optimizers
-   - Training Loops
+### 4. Training Models
+- Loss Functions
+- Optimizers
+- Training Loops
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_4.ipynb)
 
-5. **Saving and Loading Models**
-   - Model Serialization
-   - Loading Pretrained Models
-   - Model Deployment Basics
+### 5. Saving and Loading Models
+- Model Serialization
+- Loading Pretrained Models
+- Model Deployment Basics
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_5.ipynb)
 
 ### 🔍 Each tutorial includes:
 
@@ -94,7 +99,20 @@ To get the most out of these tutorials, you should have:
 
 ### Option 1: Run on Google Colab (Recommended for beginners)
 
-Each notebook has a "Open in Colab" button at the top that allows you to run the tutorial in your browser without any local setup.
+Each tutorial has an "Open in Colab" badge that allows you to run it directly in your browser:
+
+| Tutorial | Open in Colab |
+|----------|---------------|
+| 1. Introduction to Tensors | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_1.ipynb) |
+| 2. Autograd and Automatic Differentiation | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_2.ipynb) |
+| 3. Neural Networks with PyTorch | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_3.ipynb) |
+| 4. Training Models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_4.ipynb) |
+| 5. Saving and Loading Models | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_5.ipynb) |
+
+Running in Colab gives you:
+- Free GPU/TPU access
+- No local setup required
+- Easy sharing and collaboration
 
 ### Option 2: Local Setup
 
