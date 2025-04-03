@@ -197,9 +197,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<p align="center">
-  <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">⭐ Please Star this repository</a> if you find it helpful!
-</p>
 
 
 <p align="center">
