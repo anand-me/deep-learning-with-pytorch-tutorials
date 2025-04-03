@@ -72,6 +72,10 @@ Tensors are multi-dimensional arrays that can represent data in various shapes a
 
 ##  **Examples of Creating Tensors**
 ---
+
+<a href="https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_1.ipynb" target="_blank">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 """
 
 import torch
