@@ -204,12 +204,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <a href="https://github.com/anand-me/deep-learning-with-pytorch-tutorials/stargazers">
   <svg width="160" height="50" viewBox="0 0 160 50" xmlns="http://www.w3.org/2000/svg">
-    <rect width="160" height="50" rx="25" fill="#FFD700">
-      <animate attributeName="fill" values="#FFD700;#FFC107;#FFD700" dur="1.5s" repeatCount="indefinite"/>
-    </rect>
-    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="black" font-size="18" font-weight="bold">⭐ Star Us!</text>
+    <rect width="160" height="50" rx="25" fill="#FFD700"/>
+    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" fill="black" font-size="18" font-weight="bold">
+      <tspan id="text">⭐</tspan>
+      <animate attributeName="visibility" values="visible;hidden" dur="1s" repeatCount="indefinite"/>
+      <animate attributeName="textLength" from="0" to="60" dur="1.5s" repeatCount="indefinite"/>
+    </text>
   </svg>
 </a>
+
 
 
 
