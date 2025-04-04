@@ -217,7 +217,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 
 
-<p align="center">
-  <img src="https://pytorch.org/assets/images/logo-dark.svg" alt="PyTorch Icon" width="30"/>
-  Created with ❤️ by <a href="https://github.com/anand-me">Akshay Anand</a>
-</p>
+
