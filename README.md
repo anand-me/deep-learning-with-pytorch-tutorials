@@ -34,7 +34,7 @@
 
 Welcome to the **Deep Learning with PyTorch Tutorials** repository! This educational project provides a structured learning path from basic tensor operations to model deployment in production. Each tutorial builds upon knowledge from previous chapters, creating a comprehensive deep learning curriculum.
 
-Developed by **Akshay Anand** as part of PhD research at **Florida State University**, these tutorials combine theoretical explanations with practical code examples to enhance understanding of deep learning concepts.
+Developed by **Akshay Anand** during his PhD (as part of learning PyTorch) at **Florida State University**, these tutorials combine theoretical explanations with practical code examples to enhance understanding of deep learning concepts.
 
 ### ✨ Features
 
