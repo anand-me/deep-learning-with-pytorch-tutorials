@@ -53,31 +53,31 @@ This series consists of five interconnected tutorials that guide you from founda
 - Understanding Tensors
 - Basic Tensor Operations
 - Tensor Manipulation
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_1.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_1.ipynb)
 
 ### 2. Autograd and Automatic Differentiation
 - Understanding Gradients
 - Computational Graphs
 - Gradient Tracking and Management
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_2.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_2.ipynb)
 
 ### 3. Neural Networks with PyTorch
 - PyTorch's nn Module
 - Building Neural Network Layers
 - Creating Complete Network Architectures
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_3.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_3.ipynb)
 
 ### 4. Training Models
 - Loss Functions
 - Optimizers
 - Training Loops
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_4.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_4.ipynb)
 
 ### 5. Saving and Loading Models
 - Model Serialization
 - Loading Pretrained Models
 - Model Deployment Basics
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/PyTorchTuto_5.ipynb)
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anand-me/deep-learning-with-pytorch-tutorials/blob/main/src/PyTorchTuto_5.ipynb)
 
 ### 🔍 Each tutorial includes:
 
