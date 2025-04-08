@@ -181,7 +181,7 @@ Contributions are welcome and greatly appreciated! Here's how you can help:
 - **Suggest enhancements**: New tutorials, clearer explanations, or additional examples
 - **Submit pull requests**: Improve code, fix typos, or add content
 
-Please check the [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines.
+Please check the [contributing.md](contributing.md) file for detailed guidelines.
 
 ## 🙏 Acknowledgements
 
